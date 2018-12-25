@@ -19,7 +19,7 @@ class UI {
                 title: 'Book Two',
                 author: 'Sarah Doe',
                 isbn: '23123134'
-            },
+            }
         ];
 
         const books = StoredBooks;
@@ -43,6 +43,21 @@ class UI {
     }
 }
 
-
+// Event Listener
 
 document.addEventListener('DOMContentLoaded', UI.displayBooks)
+
+// Add book
+
+document.querySelector('#book-form').addEventListener('submit', (e) => {
+
+    e.preventDefault();
+
+    const title = document.querySelector('#title').value;
+    const author = document.querySelector('#author').value;
+    const isbn = document.querySelector('#isbn').value;
+
+    const book = new Book(title, author, isbn);
+
+    console.log(book)
+});

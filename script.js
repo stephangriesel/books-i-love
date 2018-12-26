@@ -86,6 +86,9 @@ document.querySelector("#book-form").addEventListener("submit", e => {
   } else {
     const book = new Book(title, author, isbn);
     UI.addBookToList(book);
+    //Success message
+    UI.showAlert('Book Added', 'success');
+
     UI.clearFields();
   }
 });
@@ -93,4 +96,5 @@ document.querySelector("#book-form").addEventListener("submit", e => {
 // Remove book
 document.querySelector("#book-list").addEventListener("click", e => {
   UI.deleteBook(e.target);
+  UI.showAlert('Book Removed', 'danger');
 });

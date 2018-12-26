@@ -8,20 +8,9 @@ class Book {
 
 class UI {
   static displayBooks() {
-    const StoredBooks = [
-      {
-        title: "Book One",
-        author: "John Doe",
-        isbn: "32311234"
-      },
-      {
-        title: "Book Two",
-        author: "Sarah Doe",
-        isbn: "23123134"
-      }
-    ];
+    
 
-    const books = StoredBooks;
+    const books = Store.getBooks();
 
     books.forEach(book => UI.addBookToList(book));
   }
@@ -65,6 +54,39 @@ class UI {
   }
 }
 
+// Store values
+class Store {
+    static getBooks() {
+        let books;
+        if(localStorage.getItem('books') === null) {
+            books = [];
+        } else {
+            books === JSON.parse(localStorage.getItem('books'));
+        }
+
+        return books;
+    }
+
+    static addBook(book) {
+        const books = Store.getBooks();
+        books.push(book);
+        localStorage.setItem('books', JSON.stringify(books));
+    }
+
+    static removeBook(isbn) {
+        const books = Store.getBooks();
+
+        books.forEach((book,index) => {
+            if(book.isbn === isbn) {
+                books.splice(index, 1);
+            }
+        });
+
+        localStorage.setItem('books',JSON.stringify(books));
+    }
+}
+
+
 // Event Listener
 
 document.addEventListener("DOMContentLoaded", UI.displayBooks);
@@ -86,6 +108,10 @@ document.querySelector("#book-form").addEventListener("submit", e => {
   } else {
     const book = new Book(title, author, isbn);
     UI.addBookToList(book);
+
+    // Add book to store
+    Store.addBook(book);
+
     //Success message
     UI.showAlert('Book Added', 'success');
 
@@ -96,5 +122,7 @@ document.querySelector("#book-form").addEventListener("submit", e => {
 // Remove book
 document.querySelector("#book-list").addEventListener("click", e => {
   UI.deleteBook(e.target);
+  // Remove book for store
+  Store.removeBook(e.target.parentElement.previousElementSibling.textContent);
   UI.showAlert('Book Removed', 'danger');
 });
